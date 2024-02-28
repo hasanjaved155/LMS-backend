@@ -61,3 +61,23 @@ export const getDashboardController = async (req, res) => {
         });
     }
 };
+
+// export const getSearchDashboard = async (req, res) => {
+//     try {
+//         const { keyword } = req.params;
+//         const results = await dashboardModel
+//             .find({
+//                 $or: [
+//                     { name: { $regex: keyword, $options: "i" } },
+//                 ],
+//             })
+//         res.json(results);
+//     } catch (error) {
+//         console.log(error);
+//         res.status(400).send({
+//             success: false,
+//             message: "Error In Search Product API",
+//             error,
+//         });
+//     }
+// }
