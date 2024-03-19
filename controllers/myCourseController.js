@@ -1,6 +1,6 @@
-import dashboardModel from "../models/dashboardModel.js";
+import mycourseModel from "../models/mycourseModel.js";
 
-export const createdashboardController = async (req, res) => {
+export const createMyCourseController = async (req, res) => {
   try {
     const { name, link, image, role } = req.body;
 
@@ -13,62 +13,59 @@ export const createdashboardController = async (req, res) => {
     if (!image) {
       return res.status(400).send({ message: "Image is required" });
     }
-    if (!role || !role.length) {
-      return res.status(400).send({ message: "At least one role is required" });
-    }
 
-    const existingDashboard = await dashboardModel.findOne({ link });
-    if (existingDashboard) {
+    const existingMycourse = await mycourseModel.findOne({ link });
+    if (existingMycourse) {
       return res.status(409).send({
         success: false,
-        message: "Dashboard already exists",
+        message: "Course already exists",
       });
     }
 
-    const dashboard = new dashboardModel({ name, link, image, role });
-    await dashboard.save();
+    const courses = new mycourseModel({ name, link, image });
+    await courses.save();
 
     res.status(201).send({
       success: true,
-      message: "Dashboard created successfully",
-      dashboard,
+      message: "course created successfully",
+      courses,
     });
   } catch (error) {
     console.error(error);
     res.status(500).send({
       success: false,
-      message: "Error while creating dashboard",
+      message: "Error while creating course",
       error: error.message,
     });
   }
 };
 
-export const getDashboardController = async (req, res) => {
+export const getMyCourseController = async (req, res) => {
   try {
-    let dashboards;
+    let courses;
 
     // Check if there's a search term in the request query
     if (req.query.search) {
       const searchTerm = req.query.search;
       // Use a case-insensitive regular expression to search for dashboards containing the search term
-      dashboards = await dashboardModel.find({
+      courses = await mycourseModel.find({
         name: { $regex: searchTerm, $options: "i" },
       });
     } else {
       // If no search term provided, fetch all dashboards
-      dashboards = await dashboardModel.find();
+      courses = await mycourseModel.find();
     }
 
     res.status(200).send({
       success: true,
-      message: "Fetched dashboards successfully",
-      dashboards,
+      message: "Fetched courses successfully",
+      courses,
     });
   } catch (error) {
     console.log(error);
     res.status(500).send({
       success: false,
-      message: "Error while fetching dashboards",
+      message: "Error while fetching courses",
       error,
     });
   }

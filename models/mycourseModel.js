@@ -16,17 +16,8 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    role: [
-      {
-        rolename: {
-          type: String,
-          enum: ["Employee", "Buyer"], // Restrict values to "Employee" or "Buyer"
-          required: true,
-        },
-      },
-    ],
   },
   { timestamps: true }
 );
 
-export default mongoose.model("dashboards", userSchema);
+export default mongoose.model("mycourse", userSchema);

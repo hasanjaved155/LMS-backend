@@ -1,14 +1,25 @@
 import { comparePassword, hashPassword } from "../helpers/authHelper.js";
-import userModel from "../models/userModel.js";
+import userModel from "../models/userPCSModel.js";
 import JWT from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { sendEmail } from "./mail-service.js";
 
-export const registerController = async (req, res) => {
+export const registerPCSController = async (req, res) => {
   try {
-    const { name, email, password, confirmPassword } = req.body;
-    console.log(name, email, password, confirmPassword);
-    if (!name) {
+    const {
+      firstName,
+      lastName,
+      email,
+      password,
+      phoneNo,
+      employeeId,
+      dateOfJoining,
+    } = req.body;
+    //console.log(firstName, lastName, email, password, phoneNo);
+    if (!firstName) {
+      return res.send({ message: "Name is Required" });
+    }
+    if (!lastName) {
       return res.send({ message: "Name is Required" });
     }
     if (!email) {
@@ -17,15 +28,14 @@ export const registerController = async (req, res) => {
     if (!password) {
       return res.send({ message: "Password is Required" });
     }
-    if (!confirmPassword) {
-      return res.send({ message: "Confirm Password is Required" });
+    if (!phoneNo) {
+      return res.send({ message: "phoneNo is Required" });
     }
-
-    if (password !== confirmPassword) {
-      return res.status(401).send({
-        success: false,
-        message: "Password is not match with Confirm Password",
-      });
+    if (!employeeId) {
+      return res.send({ message: "employeeId is Required" });
+    }
+    if (!dateOfJoining) {
+      return res.send({ message: "dateOfJoining is Required" });
     }
 
     //check user
@@ -34,13 +44,21 @@ export const registerController = async (req, res) => {
     if (existingUser) {
       return res.status(200).send({
         success: false,
-        message: "Already Register pleasr login",
+        message: "Already Register please login",
       });
     }
     // register user
     const hashedPassword = await hashPassword(password);
     //save
-    const user = new userModel({ name, email, password: hashedPassword });
+    const user = new userModel({
+      firstName,
+      lastName,
+      email,
+      password: hashedPassword,
+      phoneNo,
+      employeeId,
+      dateOfJoining,
+    });
     await user.save();
 
     res.status(201).send({
@@ -58,7 +76,7 @@ export const registerController = async (req, res) => {
   }
 };
 
-export const loginController = async (req, res) => {
+export const loginPCSController = async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -91,10 +109,12 @@ export const loginController = async (req, res) => {
       message: "login successfully",
       user: {
         _id: user._id,
-        name: user.name,
+        firstName: user.firstName,
+        lastName: user.lastName,
         email: user.email,
-        phone: user.phone,
-        address: user.address,
+        phoneNo: user.phoneNo,
+        employeeId: user.employeeId,
+        dateOfJoining: user.dateOfJoining,
         role: user.role,
       },
       token,
@@ -109,7 +129,7 @@ export const loginController = async (req, res) => {
   }
 };
 
-export const getAllUsers = async (req, res) => {
+export const getPCSAllUsers = async (req, res) => {
   try {
     // Add logic here to fetch the users data from the database
     const users = await userModel.find();
@@ -129,7 +149,37 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
-export const getForgetPassword = async (req, res) => {
+export const getPCSUser = async (req, res) => {
+  try {
+    // Assuming the user ID is passed in the request parameters
+    const { userId } = req.params;
+
+    // Fetch the user from the database based on the user ID
+    const user = await userModel.findOne({ userId });
+
+    if (user) {
+      res.status(200).send({
+        success: true,
+        message: "Fetched user successfully",
+        user,
+      });
+    } else {
+      res.status(404).send({
+        success: false,
+        message: "User not found",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error while fetching user",
+      error,
+    });
+  }
+};
+
+export const getPCSForgetPassword = async (req, res) => {
   try {
     const { email } = req.body;
     if (!email) {
@@ -156,7 +206,7 @@ export const getForgetPassword = async (req, res) => {
     const message =
       `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n` +
       `Please click on the following link, or paste this into your browser to complete the process:\n\n` +
-      `http://localhost:3000/reset-password/${user._id}/${token}\n\n` +
+      `http://localhost:3000/reset-password-pcs/${user._id}/${token}\n\n` +
       `If you did not request this, please ignore this email and your password will remain unchanged.\n`;
     await sendEmail(email, message);
 
@@ -173,7 +223,7 @@ export const getForgetPassword = async (req, res) => {
   }
 };
 
-export const getResetPassword = async (req, res) => {
+export const getPCSResetPassword = async (req, res) => {
   try {
     const { id, token } = req.params;
     const { password } = req.body;

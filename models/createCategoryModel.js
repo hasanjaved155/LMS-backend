@@ -2,12 +2,8 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-// Subsubcategory Schema
+// Category Schema
 const subSubCategorySchema = new Schema({
-  link: {
-    type: String,
-    required: true,
-  },
   subSubCategoryName: {
     type: String,
     required: true,
@@ -31,5 +27,4 @@ const categorySchema = new Schema({
   },
   subCategories: [subCategorySchema],
 });
-
-export default mongoose.model("Category", categorySchema);
+export default mongoose.model("createCategory", categorySchema);
