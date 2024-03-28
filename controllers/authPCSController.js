@@ -15,6 +15,7 @@ export const registerPCSController = async (req, res) => {
       employeeId,
       dateOfJoining,
     } = req.body;
+
     //console.log(firstName, lastName, email, password, phoneNo);
     if (!firstName) {
       return res.send({ message: "Name is Required" });
@@ -29,7 +30,9 @@ export const registerPCSController = async (req, res) => {
       return res.send({ message: "Password is Required" });
     }
     if (!phoneNo) {
-      return res.send({ message: "phoneNo is Required" });
+      return res.send({ message: "Phone Number is Required" });
+    } else if (phoneNo.length !== 10) {
+      return res.send({ message: "Phone Number must be 10 digits long" });
     }
     if (!employeeId) {
       return res.send({ message: "employeeId is Required" });

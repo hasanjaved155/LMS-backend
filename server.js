@@ -7,7 +7,7 @@ import dashboardRoutes from "./routes/dashboardRoutes.js";
 import playlistRoutes from "./routes/playlistRoutes.js";
 import userPCSRoutes from "./routes/userPCSRoutes.js";
 import myCourseRoutes from "./routes/myCourseRoutes.js";
-import createCategoryRoutes from "./routes/createCategoryRoutes.js";
+import categoryRoutes from "./routes/categoryRoutes.js";
 import cors from "cors";
 
 dotenv.config();
@@ -24,7 +24,7 @@ app.use("/authpcs", userPCSRoutes);
 app.use("/dashboard", dashboardRoutes);
 app.use("/playlist", playlistRoutes);
 app.use("/course", myCourseRoutes);
-app.use("/create", createCategoryRoutes);
+app.use("/category", categoryRoutes);
 
 app.get("/", (req, res) => {
   res.send("abc");
