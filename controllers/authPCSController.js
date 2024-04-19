@@ -83,7 +83,7 @@ export const loginPCSController = async (req, res) => {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
-      return res.status(404).send({
+      return res.status(200).send({
         success: false,
         message: "Invalid email or password",
       });
@@ -91,9 +91,19 @@ export const loginPCSController = async (req, res) => {
     //check user
     const user = await userModel.findOne({ email });
     if (!user) {
-      return res.status(404).send({
+      return res.status(200).send({
         success: false,
         message: "Email is not registered",
+      });
+    }
+    if (user.role === "admin") {
+      user.isVerified = true
+    }
+
+    if (!user.isVerified) {
+      return res.status(200).send({
+        success: false,
+        message: 'Please contact admin for verification',
       });
     }
     const match = await comparePassword(password, user.password);
@@ -155,10 +165,10 @@ export const getPCSAllUsers = async (req, res) => {
 export const getPCSUser = async (req, res) => {
   try {
     // Assuming the user ID is passed in the request parameters
-    const { userId } = req.params;
+    const { _id } = req.params;
 
     // Fetch the user from the database based on the user ID
-    const user = await userModel.findOne({ userId });
+    const user = await userModel.findOne({ _id });
 
     if (user) {
       res.status(200).send({
@@ -181,6 +191,30 @@ export const getPCSUser = async (req, res) => {
     });
   }
 };
+
+export const updateUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { isVerified } = req.body; // Assuming you're sending { isVerified: true/false } in the request body
+    // Find the user by ID and update the isVerified field
+    const updatedUser = await userModel.findByIdAndUpdate(id, { isVerified }, { new: true });
+    if (!updatedUser) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.status(200).send({
+      success: true,
+      message: "User Updated successfully",
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({
+      success: false,
+      message: "Error while fetching user",
+      error,
+    });
+  }
+}
 
 export const getPCSForgetPassword = async (req, res) => {
   try {

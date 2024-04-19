@@ -35,12 +35,25 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      default: "subscriber",
+      default: "Employee",
     },
+
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
+
     assignedCourses: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "mycourse",
+        ref: "dashboards",
+      },
+    ],
+
+    employeeDetails: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "employeeinformation",
       },
     ],
   },

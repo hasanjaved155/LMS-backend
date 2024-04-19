@@ -2,7 +2,7 @@ import playlistModel from "../models/playlistModel.js";
 
 export const createPlaylistController = async (req, res) => {
     try {
-        const { path, listId, name, lecId } = req.body;
+        const { path, listId, name, lecId, role } = req.body;
 
         if (!path) {
             return res.send({ message: 'Path is Required' })
@@ -16,6 +16,9 @@ export const createPlaylistController = async (req, res) => {
         if (!lecId) {
             return res.send({ message: 'lecId is Required' })
         }
+        if (!role || !role.length) {
+            return res.status(400).send({ message: "At least one role is required" });
+        }
 
 
         const existingPlaylist = await playlistModel.findOne({ path })
@@ -27,7 +30,7 @@ export const createPlaylistController = async (req, res) => {
             })
         }
 
-        const playlist = new playlistModel({ path, listId, name, lecId });
+        const playlist = new playlistModel({ path, listId, name, lecId, role });
         await playlist.save();
 
         res.status(201).send({

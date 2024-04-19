@@ -8,6 +8,8 @@ import playlistRoutes from "./routes/playlistRoutes.js";
 import userPCSRoutes from "./routes/userPCSRoutes.js";
 import myCourseRoutes from "./routes/myCourseRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
+import employeeInformationRoutes from "./routes/employeeInformationRoutes.js"
+import festivalRoutes from './routes/festivalRoutes.js';
 import cors from "cors";
 
 dotenv.config();
@@ -25,6 +27,8 @@ app.use("/dashboard", dashboardRoutes);
 app.use("/playlist", playlistRoutes);
 app.use("/course", myCourseRoutes);
 app.use("/category", categoryRoutes);
+app.use("/employee", employeeInformationRoutes)
+app.use("/festival", festivalRoutes);
 
 app.get("/", (req, res) => {
   res.send("abc");
