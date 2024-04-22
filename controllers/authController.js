@@ -156,7 +156,7 @@ export const getForgetPassword = async (req, res) => {
     const message =
       `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\n` +
       `Please click on the following link, or paste this into your browser to complete the process:\n\n` +
-      `http://107.22.154.213/reset-password/${user._id}/${token}\n\n` +
+      `http://3.212.222.137/reset-password/${user._id}/${token}\n\n` +
       `If you did not request this, please ignore this email and your password will remain unchanged.\n`;
     await sendEmail(email, message);
 
