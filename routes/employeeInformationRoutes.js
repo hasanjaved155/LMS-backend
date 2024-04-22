@@ -12,7 +12,7 @@ router.post('/designation/:userId', async (req, res) => {
         // Find the registration document by ID
         const user = await userPCSModel.findById(userId);
         if (!user) {
-            return res.status(404).send({ message: "user not found" });
+            return res.status(201).send({ message: "user not found" });
         }
 
 
