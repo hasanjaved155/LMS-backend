@@ -11,6 +11,7 @@ import categoryRoutes from "./routes/categoryRoutes.js";
 import employeeInformationRoutes from "./routes/employeeInformationRoutes.js"
 import festivalRoutes from './routes/festivalRoutes.js';
 import teachPCS360 from './routes/teachPCS360Routes.js';
+import paymentRoutes from './routes/paymentRoutes.js';
 import cors from "cors";
 
 dotenv.config();
@@ -31,6 +32,7 @@ app.use("/category", categoryRoutes);
 app.use("/employee", employeeInformationRoutes)
 app.use("/festival", festivalRoutes);
 app.use("/teach", teachPCS360);
+app.use("/create", paymentRoutes);
 
 app.get("/", (req, res) => {
   res.send("abc");
