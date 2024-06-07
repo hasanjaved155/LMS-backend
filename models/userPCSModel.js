@@ -43,10 +43,16 @@ const userSchema = new mongoose.Schema(
       default: false,
     },
 
+    // assignedCourses: [
+    //   {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "dashboards",
+    //   },
+    // ],
     assignedCourses: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "dashboards",
+        ref: "course",
       },
     ],
 
@@ -54,6 +60,12 @@ const userSchema = new mongoose.Schema(
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "employeeinformation",
+      },
+    ],
+    cart: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "cart",
       },
     ],
   },

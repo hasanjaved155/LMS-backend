@@ -1,12 +1,12 @@
 import express from "express";
-import { createdashboardController, getDashboardController } from "../controllers/dashboardController.js";
+import { createCourseController, getAllCourse, getCourseController } from "../controllers/courseController.js";
+
+const router = express.Router();
 
 import cloudinary from "cloudinary"
 import ExpressFormidable from "express-formidable"
-import dashboardModel from "../models/dashboardModel.js";
-import userModel from "../models/userPCSModel.js";
-import playlistModel from "../models/playlistModel.js";
-const router = express.Router();
+import userPCSModel from "../models/userPCSModel.js";
+import courseModel from "../models/courseModel.js";
 
 cloudinary.config({
     cloud_name: 'dalfbjhy3',
@@ -14,21 +14,23 @@ cloudinary.config({
     api_secret: '5F5darjLiIxnuxadrupUkQW7XIc'
 });
 
-router.post('/create-dashboard', createdashboardController);
-router.get('/get-dashboard', getDashboardController);
-//router.get("/search/:keyword", getSearchDashboard);
+
+
+router.post('/createCourse', createCourseController);
+router.get('/allCourse', getAllCourse);
+router.get('/get-dashboard', getCourseController);
 
 router.post("/assignments", async (req, res) => {
     try {
         const { userId, courseId } = req.body;
-        const user = await userModel.findById(userId);
+        const user = await userPCSModel.findById(userId);
 
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
 
         // Check if course exists
-        const course = await dashboardModel.findById(courseId);
+        const course = await courseModel.findById(courseId);
 
         if (!course) {
             return res.status(404).json({ message: "Course not found" });
@@ -65,7 +67,7 @@ router.get("/:id/assigned-courses", async (req, res) => {
     const userId = req.params.id;
 
     try {
-        const user = await userModel.findById(userId).populate("assignedCourses");
+        const user = await userPCSModel.findById(userId).populate("assignedCourses");
         // console.log(user);
         if (!user) {
             return res.status(404).json({ message: "User not found" });
@@ -83,43 +85,6 @@ router.get("/:id/assigned-courses", async (req, res) => {
     }
 });
 
-router.get('/reviews', async (req, res) => {
-    try {
-        const { path } = req.query; // Assuming the link is passed as a query parameter
-        // console.log({ path });
-
-        // Find the playlist by link
-        const playlist = await playlistModel.findOne({ path }).populate('reviews');
-        if (!playlist) {
-            return res.status(404).send({
-                success: false,
-                message: "Playlist not found"
-            });
-        }
-
-        const reviews = playlist.reviews;
-        // console.log(reviews)
-        // Calculate average rating
-        let totalRating = 0;
-        for (const review of reviews) {
-            totalRating += review.rating;
-        }
-        const averageRating = reviews.length > 0 ? totalRating / reviews.length : 0;
-        res.status(200).send({
-            success: true,
-            averageRating
-        });
-    } catch (error) {
-        console.error("Error fetching reviews:", error);
-        res.status(500).send({
-            success: false,
-            message: "An error occurred while fetching the reviews"
-        });
-    }
-});
-
-
-
 
 router.post("/upload", ExpressFormidable({ maxFieldsSize: 5 * 2024 * 2024 }), async (req, res) => {
     try {
@@ -133,7 +98,6 @@ router.post("/upload", ExpressFormidable({ maxFieldsSize: 5 * 2024 * 2024 }), as
         console.error(error.message);
     }
 })
-
 
 
 export default router;

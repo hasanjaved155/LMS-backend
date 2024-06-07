@@ -11,15 +11,36 @@ const userSchema = new mongoose.Schema({
         required: true,
         trim: true
     },
-    name: {
+    courseName: {
         type: String,
         required: true
+    },
+    playlistName: {
+        type: String,
+        required: true
+    },
+    image: {
+        type: String,
+        required: true,
     },
     lecId: {
         type: String,
         required: true,
         trim: true
     },
+    courseTitle: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    finalRating: {
+        type: Number,
+        default: 0
+    },
+    // viewCount: {
+    //     type: Number,
+    //     default: 0
+    // },
     reviews: [
         {
             type: mongoose.Schema.Types.ObjectId,
@@ -39,4 +60,4 @@ const userSchema = new mongoose.Schema({
 
 
 
-export default mongoose.model('playlist', userSchema);
+export default mongoose.model('course', userSchema);

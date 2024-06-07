@@ -22,7 +22,13 @@ const userSchema = new mongoose.Schema({
     role: {
         type: String,
         default: "subscriber"
-    }
+    },
+    cart: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "cart",
+        },
+    ],
 }, { timestamps: true })
 
 

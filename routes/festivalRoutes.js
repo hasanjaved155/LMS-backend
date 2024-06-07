@@ -15,9 +15,22 @@ router.get('/', async (req, res) => {
 
 // GET today's festival
 router.get('/today', async (req, res) => {
+    const currentDate = new Date();
+
+    // Extract year, month, and day components
+    // const year = currentDate.getFullYear();
+    // const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Month is zero-based
+    // const day = String(currentDate.getDate()).padStart(2, '0');
+
+    // Format date as YYYY-MM-DD
+    // const today = `${year}-${month}-${day}`;
+
+    // console.log('Today:', today);
     try {
         const today = new Date().toISOString().split('T')[0]; // Get today's date in YYYY-MM-DD format
+        // console.log(today);
         const festival = await Festival.findOne({ date: today });
+        // console.log(festival);
 
         if (festival) {
             res.status(201).send({
