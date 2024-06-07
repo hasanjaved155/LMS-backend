@@ -16,6 +16,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    // finalRating: {
+    //   type: String,
+    //   default: 0,
+    // },
     role: [
       {
         rolename: {
@@ -25,6 +29,7 @@ const userSchema = new mongoose.Schema(
         },
       },
     ],
+
   },
   { timestamps: true }
 );

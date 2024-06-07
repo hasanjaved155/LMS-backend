@@ -18,3 +18,15 @@ export const sendEmail = async (email, message) => {
 
   await transporter.sendMail(mailOptions);
 };
+
+export const sendHelpEmail = async (email, query) => {
+  const mailOptions = {
+    from: email,
+    to: "hasanjaved155@gmail.com",
+    subject: "user query",
+    text: query,
+  };
+
+  await transporter.sendMail(mailOptions);
+};
+
