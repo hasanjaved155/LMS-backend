@@ -44,5 +44,26 @@ router.post("/help-desk", async (req, res) => {
 });
 
 
+router.get('/all-help', async (req, res) => {
+    try {
+        const help = await ContactModel.find({})
+        res.status(200).send({
+            success: true,
+            message: "Fetched all help successfully",
+            help,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success: false,
+            message: "Error while fetching help",
+            error,
+        });
+    }
+
+
+})
+
+
 
 export default router;
