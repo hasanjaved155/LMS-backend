@@ -17,6 +17,16 @@ const userSchema = new mongoose.Schema(
             required: true,
             trim: true,
         },
+        country: {
+            type: String,
+            required: true,
+            trim: true,
+        },
+        message: {
+            type: String,
+            required: true,
+            trim: true,
+        },
     },
     { timestamps: true }
 );
